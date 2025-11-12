@@ -4,10 +4,14 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <RootNamespace>UserManagement.Microservice.Application</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Entities\" />
+      <Folder Include="DI\" />
+      <Folder Include="DTOs\" />
+      <Folder Include="Exceptions\" />
+      <Folder Include="Services\" />
     </ItemGroup>
 
 </Project>
