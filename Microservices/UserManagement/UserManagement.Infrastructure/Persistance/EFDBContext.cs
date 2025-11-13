@@ -15,6 +15,7 @@ public class EFDBContext: DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(EFDBContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
 }
