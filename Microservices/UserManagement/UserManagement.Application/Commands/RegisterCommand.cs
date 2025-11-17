@@ -1,6 +1,8 @@
-namespace UserManagement.Application.DTOs;
+using MediatR;
 
-public class RegisterRequest
+namespace UserManagement.Application.Commands;
+
+public class RegisterCommand : IRequest<int>
 {
     public string UserName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;

@@ -1,41 +1,32 @@
-var builder = WebApplication.CreateBuilder(args);
+using UserManagement.API.Configurations;
+using UserManagement.API.Middlewares;
+using UserManagement.Application.DI;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+var builder = WebApplication.CreateBuilder(args);
+var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
+
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.RegisterRequestHandlers();
+builder.Services.ConfigureSwagger();
+builder.Services.ConfigureAuthorization(builder.Configuration);
+builder.Services.ConfigureCors(myAllowSpecificOrigins);
 
 var app = builder.Build();
+app.UseCors(myAllowSpecificOrigins);
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

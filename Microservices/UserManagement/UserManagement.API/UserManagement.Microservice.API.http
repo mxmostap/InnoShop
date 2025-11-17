@@ -1,6 +1,6 @@
 @UserManagement.Microservice.API_HostAddress = http://localhost:5062
 
-GET {{UserManagement.Microservice.API_HostAddress}}/weatherforecast/
+GET {{UserManagement.Microservice.API_HostAddress}}/qwerty/
 Accept: application/json
 
 ###

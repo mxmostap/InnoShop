@@ -16,6 +16,13 @@ public class UserRepository : GenericRepository<User, int>, IUserRepository
             .Include(u => u.Profile)
             .SingleOrDefaultAsync(u => u.UserName == userName);
     }
+    
+    public async Task<User> GetUserByEmailAsync(string userEmail)
+    {
+        return await _context.Users
+            .Include(u => u.Profile)
+            .SingleOrDefaultAsync(u => u.Email == userEmail);
+    }
 
     public async Task<IEnumerable<User>> GetUserByRoleAsync(string role)
     {
