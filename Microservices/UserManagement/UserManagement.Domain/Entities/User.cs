@@ -12,5 +12,4 @@ public class User
     public UserRole Role { get; set; }
 
     public Profile? Profile { get; set; }
-    
 }
