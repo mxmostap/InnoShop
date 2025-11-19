@@ -16,6 +16,9 @@ builder.Services.ConfigureAuthorization(builder.Configuration);
 builder.Services.ConfigureCors(myAllowSpecificOrigins);
 
 var app = builder.Build();
+//Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("12mxm345"));
+
+
 app.UseCors(myAllowSpecificOrigins);
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

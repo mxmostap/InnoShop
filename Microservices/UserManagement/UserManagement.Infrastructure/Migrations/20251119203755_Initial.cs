@@ -5,7 +5,7 @@
 namespace UserManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -47,6 +47,11 @@ namespace UserManagement.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "IsActive", "PasswordHash", "Role", "UserName" },
+                values: new object[] { 1, "mxmostapwork@gmail.com", true, "$2a$11$rLZeB6R2kS5Wq2qKkE5M5eMvJQY9W5ZQY5X5X5X5X5X5X5X5X5X5", "Admin", "admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_UserId",

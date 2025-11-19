@@ -15,9 +15,12 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        //var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var qwe = configuration["ConnectionStrings:DefaultConnection"];
+        Console.WriteLine(qwe);
         services.AddDbContext<EFDBContext>(options =>
-            options.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]));
-
+            options.UseSqlServer(qwe));
+        
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProfileRepository, ProfileRepository>();
         services.AddScoped<IJwtService, JwtService>();

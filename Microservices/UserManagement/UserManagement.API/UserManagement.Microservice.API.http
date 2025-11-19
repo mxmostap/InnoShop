@@ -1,4 +1,4 @@
-@UserManagement.Microservice.API_HostAddress = http://localhost:5062
+@UserManagement.Microservice.API_HostAddress = http://localhost:8080
 
 GET {{UserManagement.Microservice.API_HostAddress}}/qwerty/
 Accept: application/json
