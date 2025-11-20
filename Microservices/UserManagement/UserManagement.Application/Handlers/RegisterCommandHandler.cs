@@ -1,5 +1,6 @@
 using MediatR;
 using UserManagement.Application.Commands;
+using UserManagement.Application.Exceptions;
 using UserManagement.Domain.Entities;
 using UserManagement.Domain.Enums;
 using UserManagement.Domain.Repositories;
@@ -20,7 +21,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, int>
     {
         if (await _unitOfWork.Users.GetUserByUsernameAsync(request.UserName) != null)
         {
-            throw new UnauthorizedAccessException("Данный логин уже существует.");
+            throw new UnauthorizedException("Данный логин уже существует.");
         }
 
         var user = new User

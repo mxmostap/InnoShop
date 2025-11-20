@@ -32,7 +32,7 @@ public static class SwaggerConfiguration
                 }
             });
         });
-
+        
         return services;
     }
 }
