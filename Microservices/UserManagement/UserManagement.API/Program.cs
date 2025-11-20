@@ -1,6 +1,8 @@
 using UserManagement.API.Configurations;
 using UserManagement.API.Middlewares;
 using UserManagement.Application.DI;
+using UserManagement.Infrastructure.Extensions;
+using UserManagement.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -16,8 +18,13 @@ builder.Services.ConfigureAuthorization(builder.Configuration);
 builder.Services.ConfigureCors(myAllowSpecificOrigins);
 
 var app = builder.Build();
-//Console.WriteLine(BCrypt.Net.BCrypt.HashPassword("12mxm345"));
 
+await app.Services.ApplyMigrationsAsync();
+
+using var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
+await seeder.SeedAdminInfoAsync();
+    
 
 app.UseCors(myAllowSpecificOrigins);
 app.UseMiddleware<ExceptionHandlingMiddleware>();

@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using UserManagement.Domain.Entities;
 using UserManagement.Domain.Enums;
+using UserManagement.Domain.Extensions;
 
 namespace UserManagement.Infrastructure.Persistance;
 
@@ -8,7 +10,6 @@ public class EFDBContext: DbContext
 {
     public EFDBContext(DbContextOptions<EFDBContext> options) : base (options)
     {
-        Database.Migrate();
     }
 
     protected EFDBContext()
@@ -69,17 +70,5 @@ public class EFDBContext: DbContext
             entity.HasIndex(p => p.UserId)
                 .IsUnique();
         });
-        
-        modelBuilder.Entity<User>().HasData(
-            new User
-            {
-                Id = 1,
-                UserName = "admin",
-                Email = "mxmostapwork@gmail.com",
-                PasswordHash = "$2a$11$rLZeB6R2kS5Wq2qKkE5M5eMvJQY9W5ZQY5X5X5X5X5X5X5X5X5X5",
-                Role = UserRole.Admin,
-                IsActive = true
-            }
-        );
     }
 }

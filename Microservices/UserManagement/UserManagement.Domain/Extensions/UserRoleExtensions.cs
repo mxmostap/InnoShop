@@ -14,7 +14,7 @@ public static class UserRoleExtensions
         };
     }
 
-    public static UserRole FromString(string role)
+    public static UserRole FromString(this string role)
     {
         return role?.ToLower() switch
         {
