@@ -14,12 +14,14 @@ public class AuthController : ControllerBase
         _mediator = mediator;
     }
 
+    //POST: api/Auth/register
     [HttpPost("register")]
     public async Task<IActionResult> Register(RegisterCommand command)
     {
         return Ok(await _mediator.Send(command));
     }
 
+    //POST: api/Auth/login
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginCommand command)
     {

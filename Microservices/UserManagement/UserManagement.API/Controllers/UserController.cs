@@ -16,13 +16,15 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
+    // GET: api/User/AllUsers
     [HttpGet("AllUsers")]
-    [Authorize(Roles = "1")]
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
     {
         return Ok(await _mediator.Send(new GetAllUsersQuery()));
     }
 
+    // GET: api/User/AllUsers
     [HttpGet]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> GetUserById([FromQuery] int id)
@@ -30,6 +32,7 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(new GetUserByIdQuery {Id = id}));
     }
 
+    // GET: api/User?id=
     [HttpGet("Users")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllUsers()
@@ -37,6 +40,7 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(new GetUsersByRoleQuery("User")));
     }
 
+    // PATCH: api/User/Deactivate?id=
     [HttpPatch("Deactivate")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeactivateUser([FromQuery] int id)
@@ -45,6 +49,7 @@ public class UserController : ControllerBase
         return Ok();
     }
 
+    // PUT: api/User/Update
     [HttpPut("Update")]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> UpdateUser(UpdateUserCommand command)
@@ -52,6 +57,7 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(command));
     }
     
+    // PUT: api/User/Update/Profile
     [HttpPut("Update/Profile")]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> UpdateUserProfile(UpdateUserProfileCommand command)
@@ -59,6 +65,7 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(command));
     }
 
+    // DELETE: api/User/Delete?id=
     [HttpDelete("Delete")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteUser([FromQuery] int id)

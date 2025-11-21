@@ -29,7 +29,7 @@ public static class AuthorizationConfiguration
                 };
             });
 
-        services.AddAuthorization();
+        //services.AddAuthorization();
 
         return services;
     }

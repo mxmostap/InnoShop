@@ -28,13 +28,6 @@ public class JwtService : IJwtService
         };
 
         return CreateToken(claims);
-        
-        var jwtSettings = _configuration.GetSection("Jwt");
-        var secret = jwtSettings["Secret"];
-        var issuer = jwtSettings["Issuer"];
-        var audience = jwtSettings["Audience"];
-        //var expireMinutes =
-
     }
 
     public string CreateToken(IEnumerable<Claim> claims)
