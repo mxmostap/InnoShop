@@ -1,6 +1,6 @@
-using UserManagement.Application.Exceptions;
+using ProductManagement.Application.Exceptions;
 
-namespace UserManagement.API.Middlewares;
+namespace ProductManagement.API.Middlewares;
 
 public class ExceptionHandlingMiddleware
 {

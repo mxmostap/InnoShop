@@ -1,6 +1,6 @@
-@ProductManagement.Microservice.API_HostAddress = http://localhost:5015
+@ProductManagement.Microservice.API_HostAddress = http://localhost:8080
 
-GET {{ProductManagement.Microservice.API_HostAddress}}/weatherforecast/
+GET {{}}/
 Accept: application/json
 
 ###
