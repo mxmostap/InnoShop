@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using ProductManagement.Application.Queries;
 using ProductManagement.Microservice.Domain.Entities;
 using ProductManagement.Microservice.Domain.Repositories;
@@ -16,6 +17,7 @@ public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, P
 
     public async Task<Product> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
     {
+        
         return await _unitOfWork.Products.GetByIdAsync(request.Id);
     }
 }
