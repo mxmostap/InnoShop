@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using ProductManagement.Application.Exceptions;
 
 namespace ProductManagement.API.Middlewares;
@@ -37,9 +38,20 @@ public class ExceptionHandlingMiddleware
         {
             UnauthorizedException => StatusCodes.Status401Unauthorized,
             NotFoundException => StatusCodes.Status404NotFound,
+            ValidationAppException => StatusCodes.Status422UnprocessableEntity,
             _ => StatusCodes.Status500InternalServerError
         };
 
+        if (exception is ValidationAppException validationException)
+        {                        
+            return httpContext.Response.WriteAsJsonAsync(new
+            {
+                StatusCode = response.StatusCode,
+                Errors = validationException.Errors,
+                Timestamp = DateTime.UtcNow
+            });
+        }
+        
         var errorResponse = new
         {
             StatusCode = response.StatusCode,

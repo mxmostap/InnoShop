@@ -2,11 +2,11 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
-namespace UserManagement.API.Configurations;
+namespace ProductManagement.API.Configurations;
 
-public static class AuthorizationConfiguration
+public static class JwtAuthorizationConfiguration
 {
-    public static IServiceCollection ConfigureAuthorization(
+    public static IServiceCollection ConfigureJwtAuthorization(
         this IServiceCollection services,
         IConfiguration configuration)
     {

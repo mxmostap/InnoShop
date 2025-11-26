@@ -24,7 +24,7 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(new GetAllUsersQuery()));
     }
 
-    // GET: api/User/AllUsers
+    // GET: api/User?id=
     [HttpGet]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> GetUserById([FromQuery] int id)
@@ -32,7 +32,7 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(new GetUserByIdQuery {Id = id}));
     }
 
-    // GET: api/User?id=
+    // GET: api/User/AllUsers
     [HttpGet("Users")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllUsers()
