@@ -18,7 +18,7 @@
     ports:
       - "1433:1433"
     environment:
-      MSSQL_SA_PASSWORD: 123M@x45
+      SA_PASSWORD: 123M@x45
       ACCEPT_EULA: Y
     volumes:
       - user_management_data:/var/opt/mssql
@@ -32,10 +32,46 @@
       /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1433 -U sa -P '123M@x45' -No -Q \"IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'UserManagementDb') BEGIN CREATE DATABASE UserManagementDb; END\" &&
       wait"
     networks:
-      - user-management-network  
+      - user-management-network
+      
+  productmanagement.api:
+    build:
+      context: .
+      dockerfile: Microservices/ProductManagement/ProductManagement.API/Dockerfile
+    ports:
+      - "8081:8081"
+    container_name: product_management_api
+    depends_on:
+      - ProductManagementDb-sqlserver
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=ProductManagementDb-sqlserver,1433;Database=ProductManagementDB;User Id=sa;Password=123M@x45;TrustServerCertificate=true;Connect Timeout=30;
+    networks:
+      - user-management-network
+  
+  ProductManagementDb-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1434:1433"
+    environment:
+      SA_PASSWORD: 123M@x45
+      ACCEPT_EULA: Y
+    volumes:
+      - product_management_data:/var/opt/mssql
+    container_name: ProductManagementDb-sqlserver
+    command: >
+      bash -c "
+      /opt/mssql/bin/sqlservr & until /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1434 -U sa -P '123M@x45' -No -Q 'SELECT 1'; do
+      echo waiting for SQL Server;
+      sleep 2;
+      done;
+      /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1434 -U sa -P '123M@x45' -No -Q \"IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'ProductManagementDb') BEGIN CREATE DATABASE ProductManagementDb; END\" &&
+      wait"
+    networks:
+      - user-management-network
     
 volumes:
-  user_management_data:  
+  user_management_data:
+  product_management_data:
 
 networks:
   user-management-network:
