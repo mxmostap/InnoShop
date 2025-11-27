@@ -5,7 +5,7 @@ using UserManagement.Domain.Repositories;
 
 namespace UserManagement.Application.Handlers;
 
-public class DeleteUserCommandHandler :IRequestHandler<DeleteUserCommand, Unit>
+public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, Unit>
 {
     private readonly IUnitOfWork _unitOfWork;
 

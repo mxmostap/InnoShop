@@ -5,12 +5,12 @@ namespace UserManagement.Application.Commands;
 
 public class LoginCommand : IRequest<AuthResponse>
 {
-    public string Email { get; }
+    public string UserName { get; }
     public string Password { get; }
 
-    public LoginCommand(string email, string password)
+    public LoginCommand(string userName, string password)
     {
-        Email = email;
+        UserName = userName;
         Password = password;
     }
 }

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using UserManagement.Application.Interfaces;
+using UserManagement.Application.Common.Interfaces;
 using UserManagement.Application.Services;
 using UserManagement.Domain.Repositories;
 using UserManagement.Infrastructure.Persistance;

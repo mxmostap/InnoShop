@@ -1,6 +1,6 @@
 using UserManagement.Domain.Entities;
 
-namespace UserManagement.Application.Interfaces;
+namespace UserManagement.Application.Common.Interfaces;
 
 public interface IJwtService
 {

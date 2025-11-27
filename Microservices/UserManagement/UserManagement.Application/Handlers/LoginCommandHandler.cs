@@ -1,9 +1,8 @@
 using MediatR;
 using UserManagement.Application.Commands;
+using UserManagement.Application.Common.Interfaces;
 using UserManagement.Application.DTOs;
-using UserManagement.Application.Interfaces;
 using UserManagement.Domain.Repositories;
-using UserManagement.Infrastructure.Persistance;
 
 namespace UserManagement.Application.Handlers;
 
@@ -22,8 +21,8 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
 
     public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.Users.GetUserByUsernameAsync(request.Email);
-
+        var user = await _unitOfWork.Users.GetUserByUsernameAsync(request.UserName);
+        
         if (user == null || !user.IsActive)
             throw new UnauthorizedAccessException("Неверные учетные данные.");
 

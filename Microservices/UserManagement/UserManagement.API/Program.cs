@@ -10,6 +10,7 @@ var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.ConfigureEmail(builder.Configuration);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.RegisterRequestHandlers();

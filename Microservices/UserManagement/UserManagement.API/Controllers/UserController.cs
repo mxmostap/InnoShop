@@ -40,6 +40,14 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(new GetUsersByRoleQuery("User")));
     }
 
+    //POST: api/User/ResetPassword
+    [HttpPost("ResetPassword")]
+    public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
+    {
+        await _mediator.Send(command);
+        return Ok();
+    }
+    
     // PATCH: api/User/Deactivate?id=
     [HttpPatch("Deactivate")]
     [Authorize(Roles = "Admin")]

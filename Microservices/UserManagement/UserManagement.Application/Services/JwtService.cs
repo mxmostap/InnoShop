@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using UserManagement.Application.Interfaces;
+using UserManagement.Application.Common.Interfaces;
 using UserManagement.Domain.Entities;
 
 namespace UserManagement.Application.Services;

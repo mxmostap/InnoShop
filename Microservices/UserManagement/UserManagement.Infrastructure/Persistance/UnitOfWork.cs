@@ -7,15 +7,18 @@ public class UnitOfWork : IUnitOfWork
     private readonly EFDBContext _context;
     public IUserRepository Users { get; }
     public IProfileRepository Profiles { get; }
+    public IPasswordResetTokenRepository PasswordResetTokens { get; }
 
     public UnitOfWork(
         EFDBContext context,
         IUserRepository users,
-        IProfileRepository profiles)
+        IProfileRepository profiles,
+        IPasswordResetTokenRepository passwordResetTokens)
     {
         _context = context;
         Users = users;
         Profiles = profiles;
+        PasswordResetTokens = passwordResetTokens;
     }
 
     public async Task<int> SaveChangesAsync()
