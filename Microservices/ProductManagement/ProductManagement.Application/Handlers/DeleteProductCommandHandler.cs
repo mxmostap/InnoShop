@@ -22,9 +22,9 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand,
         if (!int.TryParse(_currentUserService.UserId, out int userId))
             throw new UnauthorizedException("Пользователь не прошел аутентификацию.");
         
-        var product = await _unitOfWork.Products.GetByIdAsync(request.ProductId, userId);
+        var product = await _unitOfWork.Products.GetByIdAsync(request.Id, userId);
         if (product == null)
-            throw new NotFoundException($"Продукт с ID \"{request.ProductId}\" не найден " +
+            throw new NotFoundException($"Продукт с ID \"{request.Id}\" не найден " +
                                         $"или у вас нет права на его удаление.");
         
         _unitOfWork.Products.DeleteProduct(product);

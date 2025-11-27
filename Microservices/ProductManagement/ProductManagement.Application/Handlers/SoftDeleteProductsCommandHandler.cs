@@ -15,7 +15,7 @@ public class SoftDeleteProductsCommandHandler : IRequestHandler<SoftDeleteProduc
 
     public async Task<Unit> Handle(SoftDeleteProductsCommand request, CancellationToken cancellationToken)
     {
-        await _unitOfWork.Products.SoftDeleteProductsAsync(request.UserId);
+        await _unitOfWork.Products.SoftDeleteProductsAsync(request.Id);
         
         return Unit.Value;
     }

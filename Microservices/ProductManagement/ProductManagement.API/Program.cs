@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ProductManagement.API.Configurations;
 using ProductManagement.API.Middlewares;
-using ProductManagement.Application.Behaviors;
+using ProductManagement.Application.Common.Behaviors;
 using ProductManagement.Application.DI;
 using ProductManagement.Application.Validators;
 using ProductManagement.Infrastructure.Extensions;
@@ -20,8 +20,7 @@ builder.Services.RegisterRequestHandlers();
 builder.Services.ConfigureSwagger();
 builder.Services.ConfigureJwtAuthorization(builder.Configuration);
 builder.Services.ConfigureCors(myAllowSpecificOrigins);
-builder.Services.AddValidatorsFromAssemblyContaining<CreateProductCommandValidator>();
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddValidators();
 
 var app = builder.Build();
 

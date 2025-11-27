@@ -60,7 +60,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> SoftDelete([FromQuery] int userId)
     {
-        await _mediator.Send(new SoftDeleteProductsCommand { UserId = userId });
+        await _mediator.Send(new SoftDeleteProductsCommand { Id = userId });
         return Ok();
     }
     
@@ -77,7 +77,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "User")]
     public async Task<IActionResult> DeleteProduct([FromQuery] int productId)
     {
-        await _mediator.Send(new DeleteProductCommand { ProductId = productId });
+        await _mediator.Send(new DeleteProductCommand { Id = productId });
         return Ok();
     }
     
@@ -86,7 +86,7 @@ public class ProductController : ControllerBase
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteProductsByUserId([FromQuery] int userId)
     {
-        await _mediator.Send(new DeleteProductsByUserIdCommand { UserId = userId });
+        await _mediator.Send(new DeleteProductsByUserIdCommand { Id = userId });
         return Ok();
     }
 }

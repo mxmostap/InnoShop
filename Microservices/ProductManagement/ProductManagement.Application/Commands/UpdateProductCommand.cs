@@ -1,9 +1,10 @@
 using MediatR;
+using ProductManagement.Application.Common.Interfaces;
 using ProductManagement.Microservice.Domain.Entities;
 
 namespace ProductManagement.Application.Commands;
 
-public class UpdateProductCommand : IRequest<Product>
+public class UpdateProductCommand : IRequest<Product>, IProductBase
 {
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;

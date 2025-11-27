@@ -3,9 +3,9 @@ using ProductManagement.Application.Validators.Common;
 
 namespace ProductManagement.Application.Validators;
 
-public class CreateProductCommandValidator : ProductBaseValidator<CreateProductCommand>
+public class DeleteProductsByUserIdCommandValidator : IdCommandValidator<DeleteProductsByUserIdCommand>
 {
-    public CreateProductCommandValidator()
+    public DeleteProductsByUserIdCommandValidator()
     {
         
     }

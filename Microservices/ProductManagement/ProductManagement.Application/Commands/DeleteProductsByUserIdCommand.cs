@@ -1,8 +1,9 @@
 using MediatR;
+using ProductManagement.Application.Common.Interfaces;
 
 namespace ProductManagement.Application.Commands;
 
-public class DeleteProductsByUserIdCommand : IRequest<Unit>
+public class DeleteProductsByUserIdCommand : IRequest<Unit>, IIdCommand
 {
-    public int UserId { get; set; }
+    public int Id { get; set; }
 }
