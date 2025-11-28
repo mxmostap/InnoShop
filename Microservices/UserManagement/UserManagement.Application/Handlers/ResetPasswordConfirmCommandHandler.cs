@@ -1,5 +1,6 @@
 using MediatR;
 using UserManagement.Application.Commands;
+using UserManagement.Application.Common.Interfaces;
 using UserManagement.Application.DTOs;
 using UserManagement.Domain.Repositories;
 
@@ -9,32 +10,35 @@ public class ResetPasswordConfirmCommandHandler :
     IRequestHandler<ResetPasswordConfirmCommand, ResetPasswordConfirmCommandResult>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IPasswordResetTokenService _passwordResetTokenService;
 
-    public ResetPasswordConfirmCommandHandler(IUnitOfWork unitOfWork)
+    public ResetPasswordConfirmCommandHandler(IUnitOfWork unitOfWork, IPasswordResetTokenService passwordResetTokenService)
     {
         _unitOfWork = unitOfWork;
+        _passwordResetTokenService = passwordResetTokenService;
     }
     
     public async Task<ResetPasswordConfirmCommandResult> Handle(
         ResetPasswordConfirmCommand request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.Users.GetUsersByEmailAsync(request.Email);
+        var user = await _unitOfWork.Users.GetUserByEmailAsync(request.Email);
         if(user == null)
             return ResetPasswordConfirmCommandResult.Failed("Неверный токен или Email.");
-        
-        var tokenHash = HashToken(request.Token);
-        
-        //var resetToken = await _unitOfWork.Pass
 
+        var isValidToken = await _passwordResetTokenService.ValidateResetTokenAsync(user.Id, request.Token);
+        if (!isValidToken)
+            return ResetPasswordConfirmCommandResult.Failed("Неверный или просроченный токен.");
 
+        var resetToken = await _passwordResetTokenService.GetValidTokenAsync(user.Id, request.Token);
+        if(resetToken == null)
+            return ResetPasswordConfirmCommandResult.Failed("Токен не найден.");
+
+        user.PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.NewPassword);
+        _unitOfWork.Users.Update(user);
+        await _unitOfWork.SaveChangesAsync();
+
+        await _passwordResetTokenService.InvalidateResetTokenAsync(user.Id, request.Token);
+        
         return ResetPasswordConfirmCommandResult.Successful();
-    }
-    
-    private string HashToken(string token)
-    {
-        using var sha256 = System.Security.Cryptography.SHA256.Create();
-        var hashedBytes = sha256.ComputeHash(System.Text.Encoding.UTF8.GetBytes(token));
-        return Convert.ToBase64String(hashedBytes);
-        
     }
 }

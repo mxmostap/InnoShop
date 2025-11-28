@@ -13,6 +13,7 @@ public class ProfileRepository: GenericRepository<Profile, int>, IProfileReposit
     {
         return await _context.Profiles
             .Include(p => p.User)
+            .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == userId);
     }
 }

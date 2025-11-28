@@ -10,36 +10,30 @@ namespace UserManagement.Application.Handlers;
 public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Unit>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IPasswordResetTokenService _passwordResetTokenService;
     private readonly IEmailService _emailService;
 
-    public ResetPasswordCommandHandler(IUnitOfWork unitOfWork, IEmailService emailService)
+    public ResetPasswordCommandHandler(
+        IUnitOfWork unitOfWork, 
+        IPasswordResetTokenService passwordResetTokenService,
+        IEmailService emailService)
     {
         _unitOfWork = unitOfWork;
+        _passwordResetTokenService = passwordResetTokenService;
         _emailService = emailService;
     }
     
     public async Task<Unit> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
     {
-        var user = await _unitOfWork.Users.GetUsersByEmailAsync(request.Email);
+        var user = await _unitOfWork.Users.GetUserByEmailAsync(request.Email);
         if (user == null)
             throw new NotFoundException("Ошибка получения запроса.");
 
-        var resetToken = GenerateResetToken();
-
+        var resetToken = await _passwordResetTokenService.GenerateAndSaveResetTokenAsync(user.Id, 
+            TimeSpan.FromHours(24));
+        
         await _emailService.SendPasswordResetEmailAsync(user, resetToken);
         
         return Unit.Value;
-    }
-    
-    private string GenerateResetToken()
-    {
-        var randomBytes = new byte[32];
-        using var rng = RandomNumberGenerator.Create();
-        rng.GetBytes(randomBytes);
-            
-        return Convert.ToBase64String(randomBytes)
-            .Replace('+', '-')
-            .Replace('/', '_')
-            .Replace("=", "");
     }
 }

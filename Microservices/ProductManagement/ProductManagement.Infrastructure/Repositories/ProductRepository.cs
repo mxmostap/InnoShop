@@ -17,7 +17,8 @@ public class ProductRepository : IProductRepository
     public async Task<Product> GetByIdAsync(int productId, int? userId = null)
     {
         var query = WhereNotDeleted(_context.Products)
-            .Where(p => p.Id == productId);
+            .Where(p => p.Id == productId)
+            .AsNoTracking();
 
         if (userId.HasValue)
         {
@@ -30,6 +31,7 @@ public class ProductRepository : IProductRepository
     public async Task<IEnumerable<Product>> GetAllAsync()
     {
         return await WhereNotDeleted(_context.Products)
+            .AsNoTracking()
             .ToListAsync();
     }
     
@@ -37,6 +39,7 @@ public class ProductRepository : IProductRepository
     {
         return await WhereNotDeleted(_context.Products)
             .Where(p => p.UserId == userId)
+            .AsNoTracking()
             .ToListAsync();
     }
 
@@ -44,6 +47,7 @@ public class ProductRepository : IProductRepository
     {
         return await WhereNotDeleted(_context.Products)
             .Where(p => p.Availability == true)
+            .AsNoTracking()
             .ToListAsync();
     }
 

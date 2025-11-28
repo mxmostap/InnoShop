@@ -45,7 +45,23 @@ public class UserController : ControllerBase
     public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
         await _mediator.Send(command);
-        return Ok();
+        return Ok(new
+        {
+            success = true,
+            message = "Если пользователь с таким Email существует, " +
+                      "ему отправлена инструкция по восстановлению пароля."
+        });
+    }
+    
+    //POST: api/User/ResetPasswordConfirm
+    [HttpPost("ResetPasswordConfirm")]
+    public async Task<IActionResult> ResetPasswordConfirm(ResetPasswordConfirmCommand command)
+    {
+        var result = await _mediator.Send(command);
+        if (result.Success)
+            return Ok(result);
+        
+        return BadRequest(result);
     }
     
     // PATCH: api/User/Deactivate?id=

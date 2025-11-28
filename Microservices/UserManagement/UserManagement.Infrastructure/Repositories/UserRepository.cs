@@ -14,13 +14,15 @@ public class UserRepository : GenericRepository<User, int>, IUserRepository
     {
         return await _context.Users
             .Include(u => u.Profile)
+            .AsNoTracking()
             .SingleOrDefaultAsync(u => u.UserName == userName);
     }
     
-    public async Task<User> GetUsersByEmailAsync(string userEmail)
+    public async Task<User> GetUserByEmailAsync(string userEmail)
     {
         return await _context.Users
             .Include(u => u.Profile)
+            .AsNoTracking()
             .SingleOrDefaultAsync(u => u.Email == userEmail);
     }
 
@@ -28,6 +30,7 @@ public class UserRepository : GenericRepository<User, int>, IUserRepository
     {
         return await _context.Users
             .Include(u => u.Profile)
+            .AsNoTracking()
             .Where(u => u.Role == UserRoleExtensions.FromString(role))
             .ToListAsync();
     }

@@ -18,10 +18,19 @@ public class PasswordResetTokenRepository :IPasswordResetTokenRepository
     {
         return await _context.PasswordResetTokens
             .Include(t => t.User)
+            .AsNoTracking()
             .FirstOrDefaultAsync(t =>
                 t.UserId == userId &&
                 t.TokenHash == tokenHash &&
                 t.IsValid);
+    }
+
+    public async Task<List<PasswordResetToken>> GetUserTokensAsync(int userId)
+    {
+        return await _context.PasswordResetTokens
+            .Where(t => t.UserId == userId)
+            .AsNoTracking()
+            .ToListAsync();
     }
 
     public async Task AddAsync(PasswordResetToken token)
@@ -48,5 +57,18 @@ public class PasswordResetTokenRepository :IPasswordResetTokenRepository
         }
 
         await _context.SaveChangesAsync();
+    }
+
+    public async Task DeleteExpiredTokensAsync()
+    {
+        var expiredTokens = await _context.PasswordResetTokens
+            .Where(t => t.ExpiresAt < DateTime.UtcNow || t.IsUsed)
+            .ToListAsync();
+
+        if (expiredTokens.Any())
+        {
+            _context.PasswordResetTokens.RemoveRange(expiredTokens);
+            await _context.SaveChangesAsync();
+        }
     }
 }
