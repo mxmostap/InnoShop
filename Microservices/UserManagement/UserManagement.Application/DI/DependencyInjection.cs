@@ -18,12 +18,12 @@ public static class DependencyInjection
     {
         services.AddDbContext<EFDBContext>(options =>
             options.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]));
-        
+
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IProfileRepository, ProfileRepository>();
-        services.AddScoped<IPasswordResetTokenRepository, PasswordResetTokenRepository>();
+        services.AddScoped<ITokenRepository, TokenRepository>();
         services.AddScoped<IJwtService, JwtService>();
-        services.AddScoped<IPasswordResetTokenService, PasswordResetTokenService>();
+        services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<DataSeeder>();
         

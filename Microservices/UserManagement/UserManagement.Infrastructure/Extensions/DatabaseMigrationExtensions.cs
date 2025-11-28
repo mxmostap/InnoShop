@@ -12,9 +12,18 @@ public static class DatabaseMigrationExtensions
         {
             using var scope = services.CreateScope();
             var dbContext = scope.ServiceProvider.GetRequiredService<EFDBContext>();
-            var pendingMigrations = await dbContext.Database.GetPendingMigrationsAsync();
+            var database = dbContext.Database;
+        
+            if (!await database.CanConnectAsync())
+            {
+                await database.EnsureCreatedAsync();
+            }
+        
+            var pendingMigrations = await database.GetPendingMigrationsAsync();
             if (pendingMigrations.Any())
-                await dbContext.Database.MigrateAsync();
+            {
+                await database.MigrateAsync();
+            }
         }
         catch (Exception ex)
         {

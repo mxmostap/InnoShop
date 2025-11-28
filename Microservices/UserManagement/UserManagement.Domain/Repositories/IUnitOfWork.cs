@@ -6,4 +6,5 @@ public interface IUnitOfWork : IDisposable
     IProfileRepository Profiles { get; }
 
     Task<int> SaveChangesAsync();
+    void DetachEntity<T>(T entity) where T : class;
 }

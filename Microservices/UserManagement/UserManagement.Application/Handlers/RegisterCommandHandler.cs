@@ -1,20 +1,27 @@
 using MediatR;
 using UserManagement.Application.Commands;
+using UserManagement.Application.Common.Interfaces;
 using UserManagement.Application.Exceptions;
 using UserManagement.Domain.Entities;
 using UserManagement.Domain.Enums;
 using UserManagement.Domain.Repositories;
-using UserManagement.Infrastructure.Persistance;
 
 namespace UserManagement.Application.Handlers;
 
 public class RegisterCommandHandler : IRequestHandler<RegisterCommand, int>
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly ITokenService _tokenService;
+    private readonly IEmailService _emailService;
 
-    public RegisterCommandHandler(IUnitOfWork unitOfWork)
+    public RegisterCommandHandler(
+        IUnitOfWork unitOfWork, 
+        ITokenService tokenService, 
+        IEmailService emailService)
     {
         _unitOfWork = unitOfWork;
+        _tokenService = tokenService;
+        _emailService = emailService;
     }
 
     public async Task<int> Handle(RegisterCommand request, CancellationToken cancellationToken)
@@ -28,6 +35,7 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, int>
         {
             UserName = request.UserName,
             Email = request.Email,
+            EmailConfirmed = false,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
             IsActive = true,
             Role = UserRole.User,
@@ -40,6 +48,13 @@ public class RegisterCommandHandler : IRequestHandler<RegisterCommand, int>
 
         await _unitOfWork.Users.AddAsync(user);
         await _unitOfWork.SaveChangesAsync();
+
+        var confirmationToken = await _tokenService.GenerateAndSaveTokenAsync(
+            user.Id,
+            TokenAssignment.EmailConfirmation,
+            TimeSpan.FromHours(24));
+
+        await _emailService.SendEmailConfirmationAsync(user, confirmationToken);
 
         return user.Id;
     }

@@ -64,6 +64,17 @@ public class UserController : ControllerBase
         return BadRequest(result);
     }
     
+    //POST: confirm-email
+    [HttpPost("confirm-email")]
+    public async Task<IActionResult> ResetPasswordConfirm([FromQuery]ConfirmEmailCommand command)
+    {
+        var result = await _mediator.Send(command);
+        if (result.Success)
+            return Ok(result);
+        
+        return BadRequest(result);
+    }
+    
     // PATCH: api/User/Deactivate?id=
     [HttpPatch("Deactivate")]
     [Authorize(Roles = "Admin")]

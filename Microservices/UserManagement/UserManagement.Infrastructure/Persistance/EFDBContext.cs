@@ -18,7 +18,7 @@ public class EFDBContext: DbContext
 
     public DbSet<User> Users { get; set; }
     public DbSet<Profile> Profiles { get; set; }
-    public DbSet<PasswordResetToken> PasswordResetTokens { get; set; }
+    public DbSet<Token> Tokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -72,12 +72,9 @@ public class EFDBContext: DbContext
                 .IsUnique();
         });
 
-        modelBuilder.Entity<PasswordResetToken>(entity =>
+        modelBuilder.Entity<Token>(entity =>
         {
             entity.HasKey(p => p.Id);
-
-            entity.HasIndex(p => p.UserId)
-                .IsUnique();
 
             entity.Property(p => p.TokenHash)
                 .IsRequired()

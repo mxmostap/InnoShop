@@ -21,8 +21,7 @@ public class UserRepository : GenericRepository<User, int>, IUserRepository
     public async Task<User> GetUserByEmailAsync(string userEmail)
     {
         return await _context.Users
-            .Include(u => u.Profile)
-            .AsNoTracking()
+            .Include(u => u.Profile)            
             .SingleOrDefaultAsync(u => u.Email == userEmail);
     }
 
@@ -33,5 +32,12 @@ public class UserRepository : GenericRepository<User, int>, IUserRepository
             .AsNoTracking()
             .Where(u => u.Role == UserRoleExtensions.FromString(role))
             .ToListAsync();
+    }
+
+    public async Task UpdateEmailConfirmedAsync(int userId, bool confirmed)
+    {
+        var user = new User { Id = userId, EmailConfirmed = confirmed };
+        _context.Users.Attach(user);
+        _context.Entry(user).Property(x => x.EmailConfirmed).IsModified = true;
     }
 }

@@ -1,4 +1,4 @@
-namespace UserManagement.Application.DTOs;
+namespace UserManagement.Application.Commands;
 
 public class ResetPasswordConfirmCommandResult
 {

@@ -1,10 +1,12 @@
 using System.Text.Json.Serialization;
+using UserManagement.Domain.Enums;
 
 namespace UserManagement.Domain.Entities;
 
-public class PasswordResetToken
+public class Token
 {
     public int Id { get; set; }
+    public TokenAssignment Assignment { get; set; }
     public int UserId { get; set; }    
     public string TokenHash { get; set; }
     public DateTime ExpiresAt { get; set; }
