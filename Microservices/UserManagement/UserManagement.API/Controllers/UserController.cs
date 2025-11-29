@@ -66,7 +66,7 @@ public class UserController : ControllerBase
     
     //POST: confirm-email
     [HttpPost("confirm-email")]
-    public async Task<IActionResult> ResetPasswordConfirm([FromQuery]ConfirmEmailCommand command)
+    public async Task<IActionResult> ConfirmEmail([FromQuery]ConfirmEmailCommand command)
     {
         var result = await _mediator.Send(command);
         if (result.Success)
