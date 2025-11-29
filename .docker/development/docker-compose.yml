@@ -1,0 +1,78 @@
+﻿services:
+  Db-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - "1433:1433"
+    environment:
+      SA_PASSWORD: 123M@x45
+      ACCEPT_EULA: Y
+    volumes:
+      - user_management_data:/var/opt/mssql
+    container_name: Db-sqlserver
+    command: >
+      bash -c "
+      /opt/mssql/bin/sqlservr & until /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1433 -U sa -P '123M@x45' -No -Q 'SELECT 1'; do
+      echo waiting for SQL Server;
+      sleep 2;
+      done;
+      /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1433 -U sa -P '123M@x45' -No -Q \"IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'UserManagementDb') BEGIN CREATE DATABASE UserManagementDb; END\";
+      /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1434 -U sa -P '123M@x45' -No -Q \"IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'ProductManagementDb') BEGIN CREATE DATABASE ProductManagementDb; END\";
+      wait"
+    networks:
+      - inno-shop-network
+    
+  usermanagement.api:
+    build:
+      context: ../../
+      dockerfile: Microservices/UserManagement/UserManagement.API/Dockerfile
+    ports:
+      - "5100:80"
+    container_name: user_management_api
+    restart: on-failure
+    depends_on:
+      - Db-sqlserver
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=Db-sqlserver,1433;Database=UserManagementDB;User Id=sa;Password=123M@x45;TrustServerCertificate=true;Connect Timeout=30;
+    networks:
+      - inno-shop-network  
+      
+  productmanagement.api:
+    build:
+      context: ../../
+      dockerfile: Microservices/ProductManagement/ProductManagement.API/Dockerfile
+    ports:
+      - "5101:80"
+    container_name: product_management_api
+    restart: on-failure
+    depends_on:
+      - Db-sqlserver
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__DefaultConnection=Server=Db-sqlserver,1433;Database=ProductManagementDB;User Id=sa;Password=123M@x45;TrustServerCertificate=true;Connect Timeout=30;
+    networks:
+      - inno-shop-network
+        
+  innoshop.gateway:
+    container_name: asthelp.gateway
+    restart: on-failure
+    build:
+      context: ../../
+      dockerfile: Gateway.WebApi/Dockerfile 
+    ports:
+      - "5000:80"
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+    depends_on:
+      - productmanagement.api
+      - usermanagement.api
+    networks:
+      - inno-shop-network
+    
+volumes:
+  user_management_data:
+  product_management_data:
+
+networks:
+  inno-shop-network:
+    driver: bridge

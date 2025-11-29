@@ -16,15 +16,15 @@ public class ProductController : ControllerBase
         _mediator = mediator;
     }
     
-    // GET: api/Product/AllProducts
-    [HttpGet("AllProducts")]
+    // GET: api/Product/all-products
+    [HttpGet("all-products")]
     public async Task<IActionResult> GetAllProducts()
     {
         return Ok(await _mediator.Send(new GetAllProductsQuery()));
     }
     
-    // GET: api/Product/AllAvailableProducts
-    [HttpGet("AllAvailableProducts")]
+    // GET: api/Product/all-available-products
+    [HttpGet("all-available-products")]
     public async Task<IActionResult> GetAllAvailableProducts()
     {
         return Ok(await _mediator.Send(new GetAllAvailableProductsQuery()));
@@ -38,16 +38,16 @@ public class ProductController : ControllerBase
         return Ok(await _mediator.Send(new GetProductByIdQuery(productId)));
     }
 
-    // GET: api/Product/ProductsByUserId?id=
-    [HttpGet("ProductsByUserId")]
+    // GET: api/Product/products-by-user-id?id=
+    [HttpGet("products-by-user-id")]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> GetProductsByUserId([FromQuery]int userId)
     {
         return Ok(await _mediator.Send(new GetProductsByUserIdQuery(userId)));
     }
     
-    // POST: api/Product
-    [HttpPost]
+    // POST: api/Product/create-product
+    [HttpPost("create-product")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> CreateProduct(
         [FromForm] CreateProductCommand command)
@@ -55,8 +55,8 @@ public class ProductController : ControllerBase
         return Ok(await _mediator.Send(command));
     }
     
-    // PATCH: api/Product/SoftDelete
-    [HttpPatch("SoftDelete")]
+    // PATCH: api/Product/soft-delete
+    [HttpPatch("soft-delete")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> SoftDelete([FromQuery] int userId)
     {
@@ -64,16 +64,16 @@ public class ProductController : ControllerBase
         return Ok();
     }
     
-    // PUT: api/Product/Update
-    [HttpPut("Update")]
+    // PUT: api/Product/update
+    [HttpPut("update")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> UpdateProduct(UpdateProductCommand command)
     {
         return Ok(await _mediator.Send(command));
     }
     
-    // DELETE: api/Product/Delete?id=
-    [HttpDelete("Delete")]
+    // DELETE: api/Product/delete?id=
+    [HttpDelete("delete")]
     [Authorize(Roles = "User")]
     public async Task<IActionResult> DeleteProduct([FromQuery] int productId)
     {
@@ -81,8 +81,8 @@ public class ProductController : ControllerBase
         return Ok();
     }
     
-    // DELETE: api/Product/DeleteByUserId?id=
-    [HttpDelete("DeleteByUserId")]
+    // DELETE: api/Product/delete-by-user-id?id=
+    [HttpDelete("delete-by-user-id")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteProductsByUserId([FromQuery] int userId)
     {

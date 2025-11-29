@@ -16,8 +16,8 @@ public class UserController : ControllerBase
         _mediator = mediator;
     }
 
-    // GET: api/User/AllUsers
-    [HttpGet("AllUsers")]
+    // GET: api/User/all-users
+    [HttpGet("all-users")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAll()
     {
@@ -32,16 +32,16 @@ public class UserController : ControllerBase
         return Ok(await _mediator.Send(new GetUserByIdQuery {Id = id}));
     }
 
-    // GET: api/User/AllUsers
-    [HttpGet("Users")]
+    // GET: api/User/all-user-role
+    [HttpGet("all-user-role")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> GetAllUsers()
     {
         return Ok(await _mediator.Send(new GetUsersByRoleQuery("User")));
     }
 
-    //POST: api/User/ResetPassword
-    [HttpPost("ResetPassword")]
+    //POST: api/User/reset-password
+    [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword(ResetPasswordCommand command)
     {
         await _mediator.Send(command);
@@ -53,8 +53,8 @@ public class UserController : ControllerBase
         });
     }
     
-    //POST: api/User/ResetPasswordConfirm
-    [HttpPost("ResetPasswordConfirm")]
+    //POST: api/User/reset-password-confirm
+    [HttpPost("reset-password-confirm")]
     public async Task<IActionResult> ResetPasswordConfirm(ResetPasswordConfirmCommand command)
     {
         var result = await _mediator.Send(command);
@@ -75,8 +75,8 @@ public class UserController : ControllerBase
         return BadRequest(result);
     }
     
-    // PATCH: api/User/Deactivate?id=
-    [HttpPatch("Deactivate")]
+    // PATCH: api/User/deactivate?id=
+    [HttpPatch("deactivate")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeactivateUser([FromQuery] int id)
     {
@@ -84,24 +84,24 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    // PUT: api/User/Update
-    [HttpPut("Update")]
+    // PUT: api/User/update
+    [HttpPut("update")]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> UpdateUser(UpdateUserCommand command)
     {
         return Ok(await _mediator.Send(command));
     }
     
-    // PUT: api/User/Update/Profile
-    [HttpPut("Update/Profile")]
+    // PUT: api/User/update-profile
+    [HttpPut("update-profile")]
     [Authorize(Roles = "Admin, User")]
     public async Task<IActionResult> UpdateUserProfile(UpdateUserProfileCommand command)
     {
         return Ok(await _mediator.Send(command));
     }
 
-    // DELETE: api/User/Delete?id=
-    [HttpDelete("Delete")]
+    // DELETE: api/User/delete?id=
+    [HttpDelete("delete")]
     [Authorize(Roles = "Admin")]
     public async Task<IActionResult> DeleteUser([FromQuery] int id)
     {

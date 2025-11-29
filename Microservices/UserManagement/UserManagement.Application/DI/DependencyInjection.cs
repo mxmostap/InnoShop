@@ -6,7 +6,6 @@ using UserManagement.Application.Services;
 using UserManagement.Domain.Repositories;
 using UserManagement.Infrastructure.Persistance;
 using UserManagement.Infrastructure.Repositories;
-using UserManagement.Infrastructure.Seeders;
 
 namespace UserManagement.Application.DI;
 
@@ -25,7 +24,6 @@ public static class DependencyInjection
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<ITokenService, TokenService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<DataSeeder>();
         
         return services;
     }

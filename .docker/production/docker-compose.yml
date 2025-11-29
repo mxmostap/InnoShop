@@ -1,19 +1,20 @@
-﻿services:
+services:
   usermanagement.api:
     build:
-      context: .
+      context: ../../
       dockerfile: Microservices/UserManagement/UserManagement.API/Dockerfile
     ports:
-      - "8080:8080"
+      - "5100:80"
     container_name: user_management_api
+    restart: on-failure
     depends_on:
       - UserManagementDb-sqlserver
     environment:
       - ConnectionStrings__DefaultConnection=Server=UserManagementDb-sqlserver,1433;Database=UserManagementDB;User Id=sa;Password=123M@x45;TrustServerCertificate=true;Connect Timeout=30;
     networks:
-      - user-management-network
+      - inno-shop-network
   
-  UserManagementDb-sqlserver: 
+  UserManagementDb-sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     ports:
       - "1433:1433"
@@ -22,7 +23,7 @@
       ACCEPT_EULA: Y
     volumes:
       - user_management_data:/var/opt/mssql
-    container_name: UserManagementDb-sqlserver  
+    container_name: UserManagementDb-sqlserver
     command: >
       bash -c "
       /opt/mssql/bin/sqlservr & until /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1433 -U sa -P '123M@x45' -No -Q 'SELECT 1'; do
@@ -32,21 +33,22 @@
       /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1433 -U sa -P '123M@x45' -No -Q \"IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'UserManagementDb') BEGIN CREATE DATABASE UserManagementDb; END\" &&
       wait"
     networks:
-      - user-management-network
-      
+      - inno-shop-network
+  
   productmanagement.api:
     build:
-      context: .
+      context: ../../
       dockerfile: Microservices/ProductManagement/ProductManagement.API/Dockerfile
     ports:
-      - "8081:8081"
+      - "5101:80"
     container_name: product_management_api
+    restart: on-failure
     depends_on:
       - ProductManagementDb-sqlserver
     environment:
       - ConnectionStrings__DefaultConnection=Server=ProductManagementDb-sqlserver,1433;Database=ProductManagementDB;User Id=sa;Password=123M@x45;TrustServerCertificate=true;Connect Timeout=30;
     networks:
-      - user-management-network
+      - inno-shop-network
   
   ProductManagementDb-sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
@@ -67,12 +69,28 @@
       /opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1,1434 -U sa -P '123M@x45' -No -Q \"IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'ProductManagementDb') BEGIN CREATE DATABASE ProductManagementDb; END\" &&
       wait"
     networks:
-      - user-management-network
-    
+      - inno-shop-network
+  
+  innoshop.gateway:
+    container_name: asthelp.gateway
+    restart: on-failure
+    build:
+      context: ../../
+      dockerfile: Gateway.WebApi/Dockerfile
+    ports:
+      - "5000:80"
+    volumes:
+      - ./certs:/app/certs
+    depends_on:
+      - productmanagement.api
+      - usermanagement.api
+    networks:
+      - inno-shop-network
+
 volumes:
   user_management_data:
   product_management_data:
 
 networks:
-  user-management-network:
+  inno-shop-network:
     driver: bridge

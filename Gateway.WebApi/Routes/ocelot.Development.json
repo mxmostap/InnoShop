@@ -1,0 +1,30 @@
+{
+  "Routes": [
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/productmanagement/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "PUT", "DELETE" ],
+      "SwaggerKey": "productmanagement.api"
+    },
+    {
+      "DownstreamPathTemplate": "/api/{everything}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 5100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/usermanagement/{everything}",
+      "UpstreamHttpMethod": [ "GET", "POST", "PATCH", "PUT", "DELETE" ],
+      "SwaggerKey": "usermanagement.api"
+    }
+  ]
+}

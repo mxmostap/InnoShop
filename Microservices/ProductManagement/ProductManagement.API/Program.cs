@@ -22,18 +22,22 @@ builder.Services.ConfigureJwtAuthorization(builder.Configuration);
 builder.Services.ConfigureCors(myAllowSpecificOrigins);
 builder.Services.AddValidators();
 
-var app = builder.Build();
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = true;
+});
 
-await app.Services.ApplyMigrationsAsync();
+var app = builder.Build();
 
 app.UseCors(myAllowSpecificOrigins);
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseAuthentication();
 app.UseAuthorization();

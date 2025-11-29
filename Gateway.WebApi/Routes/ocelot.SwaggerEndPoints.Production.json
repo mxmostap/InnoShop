@@ -1,0 +1,24 @@
+{
+  "SwaggerEndPoints": [
+    {
+      "Key": "productmanagement.api",
+      "Config": [
+        {
+          "Name": "productmanagement.api",
+          "Version": "v1",
+          "Url": "http://productmanagement.api/swagger/v1/swagger.json"
+        }
+      ]
+    },
+    {
+      "Key": "usermanagement.api",
+      "Config": [
+        {
+          "Name": "usermanagement.api",
+          "Version": "v1",
+          "Url": "http://usermanagement.api/swagger/v1/swagger.json"
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,6 @@
 using UserManagement.API.Configurations;
 using UserManagement.API.Middlewares;
 using UserManagement.Application.DI;
-using UserManagement.Infrastructure.Extensions;
-using UserManagement.Infrastructure.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 var myAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -18,23 +16,23 @@ builder.Services.ConfigureSwagger();
 builder.Services.ConfigureAuthorization(builder.Configuration);
 builder.Services.ConfigureCors(myAllowSpecificOrigins);
 
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = true;
+});
+
 var app = builder.Build();
-
-await app.Services.ApplyMigrationsAsync();
-
-using var scope = app.Services.CreateScope();
-var seeder = scope.ServiceProvider.GetRequiredService<DataSeeder>();
-await seeder.SeedAdminInfoAsync();
     
 
 app.UseCors(myAllowSpecificOrigins);
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseAuthentication();
 app.UseAuthorization();
