@@ -7,12 +7,9 @@ public class EFDBContext : DbContext
 {
     public EFDBContext(DbContextOptions<EFDBContext> options) : base (options)
     {
+        Database.Migrate();
     }
-
-    protected EFDBContext()
-    {
-    }
-
+    
     public DbSet<Product> Products { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

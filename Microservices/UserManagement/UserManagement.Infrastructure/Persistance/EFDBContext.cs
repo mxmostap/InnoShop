@@ -10,12 +10,9 @@ public class EFDBContext: DbContext
 {
     public EFDBContext(DbContextOptions<EFDBContext> options) : base (options)
     {
+        Database.Migrate();
     }
-
-    protected EFDBContext()
-    {
-    }
-
+    
     public DbSet<User> Users { get; set; }
     public DbSet<Profile> Profiles { get; set; }
     public DbSet<Token> Tokens { get; set; }
@@ -54,8 +51,8 @@ public class EFDBContext: DbContext
                 .WithOne(p => p.User)
                 .HasForeignKey<Profile>(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
-        });
-
+        });       
+            
         modelBuilder.Entity<Profile>(entity =>
         {
             entity.HasKey(p => p.Id);
@@ -80,5 +77,17 @@ public class EFDBContext: DbContext
                 .IsRequired()
                 .HasMaxLength(255);
         });
+        
+        modelBuilder.Entity<User>().HasData(
+            new User
+            {
+                Id = 1,
+                Email = "mxmostapwork@gmail.com",
+                EmailConfirmed = true,
+                IsActive = true,
+                PasswordHash = "$2a$11$S9/g78Q0Q25AbhHyG0btFOtbhW7BQHqN9NKLoKxCTKDawXrF9g8nG",
+                Role = UserRole.Admin,
+                UserName = "admin"
+            });
     }
 }

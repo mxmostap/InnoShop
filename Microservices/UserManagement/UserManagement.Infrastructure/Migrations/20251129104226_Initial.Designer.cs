@@ -12,8 +12,8 @@ using UserManagement.Infrastructure.Persistance;
 namespace UserManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(EFDBContext))]
-    [Migration("20251128150433_TokenAdded")]
-    partial class TokenAdded
+    [Migration("20251129104226_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -132,6 +132,18 @@ namespace UserManagement.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "mxmostapwork@gmail.com",
+                            EmailConfirmed = true,
+                            IsActive = true,
+                            PasswordHash = "$2a$11$S9/g78Q0Q25AbhHyG0btFOtbhW7BQHqN9NKLoKxCTKDawXrF9g8nG",
+                            Role = "Admin",
+                            UserName = "admin"
+                        });
                 });
 
             modelBuilder.Entity("UserManagement.Domain.Entities.Profile", b =>
