@@ -10,7 +10,7 @@ public class UserRepository : GenericRepository<User, int>, IUserRepository
 {
     public UserRepository(EFDBContext context) : base(context) { }
 
-    public async Task<User> GetUserByUsernameAsync(string userName)
+    public async Task<User?> GetUserByUsernameAsync(string userName)
     {
         return await _context.Users
             .Include(u => u.Profile)
@@ -18,7 +18,7 @@ public class UserRepository : GenericRepository<User, int>, IUserRepository
             .SingleOrDefaultAsync(u => u.UserName == userName);
     }
     
-    public async Task<User> GetUserByEmailAsync(string userEmail)
+    public async Task<User?> GetUserByEmailAsync(string userEmail)
     {
         return await _context.Users
             .Include(u => u.Profile)            

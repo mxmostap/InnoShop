@@ -2,6 +2,7 @@ using MediatR;
 using UserManagement.Application.Commands;
 using UserManagement.Application.Common.Interfaces;
 using UserManagement.Application.DTOs;
+using UserManagement.Application.Exceptions;
 using UserManagement.Domain.Repositories;
 
 namespace UserManagement.Application.Handlers;
@@ -20,14 +21,14 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, AuthResponse>
     }
 
     public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
-    {
+    {             
         var user = await _unitOfWork.Users.GetUserByUsernameAsync(request.UserName);
         
         if (user == null || !user.IsActive)
-            throw new UnauthorizedAccessException("Неверные учетные данные.");
+            throw new UnauthorizedException("Неверные учетные данные.");
 
         if (!BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
-            throw new UnauthorizedAccessException("Неверный пароль.");
+            throw new UnauthorizedException("Неверный пароль.");
 
         var token = _jwtService.GenerateToken(user);
 

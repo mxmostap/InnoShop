@@ -18,7 +18,7 @@ public class EmailService : IEmailService
     
     public async Task SendPasswordResetEmailAsync(User user, string resetToken)
     {
-        var resetLink = $"{_emailSettings.BaseUrl}/reset-password?token={resetToken}&email={user.Email}";
+        var resetLink = $"{_emailSettings.BaseUrl}/reset-password-confirm?Email={user.Email}&Token={resetToken}";
         var subject = "Восстановление пароля";
         var body = $@"
                 Здравствуйте, {user.Profile.FirstName} {user.Profile.LastName}!
@@ -35,7 +35,7 @@ public class EmailService : IEmailService
 
     public async Task SendEmailConfirmationAsync(User user, string confirmationToken)
     {
-        var confirmationLink = $"{_emailSettings.BaseUrl}/confirm-email?token={confirmationToken}&email={user.Email}";
+        var confirmationLink = $"{_emailSettings.BaseUrl}confirm-email?Email={user.Email}&Token={confirmationToken}";
             
         var subject = "Подтверждение email адреса";
         var body = $@"

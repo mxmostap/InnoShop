@@ -21,7 +21,7 @@ public class AuthControllerTests
     }
 
     [Fact]
-    public async Task Register_ValidCommand_ReturnsOkResultWithIserId()
+    public async Task Register_ValidCommand_ReturnsOkResultWithUserId()
     {
         var expectedUserId = 12;
         var command = new RegisterCommand();
