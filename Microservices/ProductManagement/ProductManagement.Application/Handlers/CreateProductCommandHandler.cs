@@ -23,7 +23,7 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
     public async Task<Product> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         if (await _unitOfWork.Products.ExistProductByName(request.Name))
-            throw new DataExistsException($"Продукт с навзанием {request.Name} уже существует.");
+            throw new DataExistsException($"Продукт с названием {request.Name} уже существует.");
         
         if (!int.TryParse(_currentUserService.UserId, out int userId))
             throw new UnauthorizedException("Пользователь не прошел аутентификацию.");

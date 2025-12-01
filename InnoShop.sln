@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement.Infrastru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagement.Tests", "Microservices\UserManagement\UserManagement.Tests\UserManagement.Tests.csproj", "{EE607AF8-D2C0-4BCD-BD8E-8CBA170C0514}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProductManagement.Tests", "Microservices\ProductManagement\ProductManagement.Tests\ProductManagement.Tests.csproj", "{72C5B080-76E5-474E-BD28-FBFD3C6A5A13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -72,6 +74,10 @@ Global
 		{EE607AF8-D2C0-4BCD-BD8E-8CBA170C0514}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE607AF8-D2C0-4BCD-BD8E-8CBA170C0514}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE607AF8-D2C0-4BCD-BD8E-8CBA170C0514}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72C5B080-76E5-474E-BD28-FBFD3C6A5A13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72C5B080-76E5-474E-BD28-FBFD3C6A5A13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72C5B080-76E5-474E-BD28-FBFD3C6A5A13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72C5B080-76E5-474E-BD28-FBFD3C6A5A13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{CE61A940-3B60-4F1F-9ABA-F11D3D0493F7} = {94FFDD6A-D5A5-4492-8B23-21E619F720A2}
@@ -85,5 +91,6 @@ Global
 		{F00ADF6B-B7F4-48DD-9D77-875A439AB314} = {7CC9253A-B5A1-4910-AF90-D5F179EAD862}
 		{44191A25-EE38-4B2A-BF3B-8A51AAFF99E5} = {7CC9253A-B5A1-4910-AF90-D5F179EAD862}
 		{EE607AF8-D2C0-4BCD-BD8E-8CBA170C0514} = {CE61A940-3B60-4F1F-9ABA-F11D3D0493F7}
+		{72C5B080-76E5-474E-BD28-FBFD3C6A5A13} = {7CC9253A-B5A1-4910-AF90-D5F179EAD862}
 	EndGlobalSection
 EndGlobal
