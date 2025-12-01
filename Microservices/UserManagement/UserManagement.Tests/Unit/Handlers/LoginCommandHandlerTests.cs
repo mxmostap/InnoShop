@@ -2,6 +2,7 @@ using Moq;
 using UserManagement.Application.Commands;
 using UserManagement.Application.Common.Interfaces;
 using UserManagement.Application.DTOs;
+using UserManagement.Application.Exceptions;
 using UserManagement.Application.Handlers;
 using UserManagement.Domain.Entities;
 using UserManagement.Domain.Enums;
@@ -11,7 +12,7 @@ namespace UserManagement.Tests.Unit.Handlers;
 
 public class LoginCommandHandlerTests
 {
-     private readonly Mock<IUnitOfWork> _unitOfWorkMock;
+    private readonly Mock<IUnitOfWork> _unitOfWorkMock;
     private readonly Mock<IJwtService> _jwtServiceMock;
     private readonly LoginCommandHandler _handler;
 
@@ -26,11 +27,11 @@ public class LoginCommandHandlerTests
     public async Task Handle_ValidCredentials_ReturnsAuthResponse()
     {
         var command = new LoginCommand("testuser", "password123");
-        var user = new User 
-        { 
-            Id = 1, 
-            UserName = "testuser", 
-            Email = "test@test.com", 
+        var user = new User
+        {
+            Id = 1,
+            UserName = "testuser",
+            Email = "test@test.com",
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
             IsActive = true,
             Role = UserRole.User,
@@ -39,9 +40,9 @@ public class LoginCommandHandlerTests
         var expectedToken = "jwt-token-here";
 
         _unitOfWorkMock.Setup(u => u.Users.GetUserByUsernameAsync(command.UserName))
-                      .ReturnsAsync(user);
+            .ReturnsAsync(user);
         _jwtServiceMock.Setup(j => j.GenerateToken(user))
-                      .Returns(expectedToken);
+            .Returns(expectedToken);
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
@@ -60,9 +61,10 @@ public class LoginCommandHandlerTests
     {
         var command = new LoginCommand("nonexistent", "password123");
         _unitOfWorkMock.Setup(u => u.Users.GetUserByUsernameAsync(command.UserName))
-                      .ReturnsAsync((User)null);
+            .ReturnsAsync((User)null);
 
-        var exception = await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _handler.Handle(command, CancellationToken.None));
+        var exception =
+            await Assert.ThrowsAsync<UnauthorizedException>(() => _handler.Handle(command, CancellationToken.None));
         Assert.Equal("Неверные учетные данные.", exception.Message);
     }
 
@@ -70,18 +72,19 @@ public class LoginCommandHandlerTests
     public async Task Handle_UserInactive_ThrowsUnauthorizedAccessException()
     {
         var command = new LoginCommand("inactiveuser", "password123");
-        var user = new User 
-        { 
-            Id = 1, 
-            UserName = "inactiveuser", 
+        var user = new User
+        {
+            Id = 1,
+            UserName = "inactiveuser",
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("password123"),
-            IsActive = false 
+            IsActive = false
         };
 
         _unitOfWorkMock.Setup(u => u.Users.GetUserByUsernameAsync(command.UserName))
-                      .ReturnsAsync(user);
+            .ReturnsAsync(user);
 
-        var exception = await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _handler.Handle(command, CancellationToken.None));
+        var exception =
+            await Assert.ThrowsAsync<UnauthorizedException>(() => _handler.Handle(command, CancellationToken.None));
         Assert.Equal("Неверные учетные данные.", exception.Message);
     }
 
@@ -89,18 +92,19 @@ public class LoginCommandHandlerTests
     public async Task Handle_InvalidPassword_ThrowsUnauthorizedAccessException()
     {
         var command = new LoginCommand("testuser", "wrongpassword");
-        var user = new User 
-        { 
-            Id = 1, 
-            UserName = "testuser", 
+        var user = new User
+        {
+            Id = 1,
+            UserName = "testuser",
             PasswordHash = BCrypt.Net.BCrypt.HashPassword("correctpassword"),
-            IsActive = true 
+            IsActive = true
         };
 
         _unitOfWorkMock.Setup(u => u.Users.GetUserByUsernameAsync(command.UserName))
-                      .ReturnsAsync(user);
+            .ReturnsAsync(user);
 
-        var exception = await Assert.ThrowsAsync<UnauthorizedAccessException>(() => _handler.Handle(command, CancellationToken.None));
+        var exception =
+            await Assert.ThrowsAsync<UnauthorizedException>(() => _handler.Handle(command, CancellationToken.None));
         Assert.Equal("Неверный пароль.", exception.Message);
     }
 }
